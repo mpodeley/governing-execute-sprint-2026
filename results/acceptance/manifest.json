@@ -1,0 +1,23 @@
+{
+  "artifacts": {
+    "matrix.json": "eea1052a2e7d6a9de1092d49075935390159eacec9463422cb41abf8c5b8e483",
+    "timing.json": "20192bffb89b251d06a35cae0e32e27d9f9c57683b24f56a99764b256cb9ed88"
+  },
+  "design": {
+    "files": {
+      "acceptance_contract/__init__.py": "193e844d97bc45ba1edc11f376b1ad29586bad80722d409761357b5e5f19fb57",
+      "acceptance_contract/__main__.py": "0ee548bcd59b3d2c7f39b835bf958ce15a0208f8c66893a391abcc990640d4cc",
+      "acceptance_contract/broker.py": "e1d940cd2b08b1bf327d9c3767eb4dfa442f245812405048f2754558edeb8e37",
+      "acceptance_contract/probes.py": "dbd2b64cd51955d5001145e3372e5d1551c69622cc9829dd66c835d91a302196",
+      "acceptance_contract/timing.py": "4ac914ef1cd0fed4e608ba1e078b817eb0bc130ffb4d95e6292d5088da7caed2",
+      "acceptance_tests/test_contract.py": "ff02e5867bd11f6655e904de858b9972ef4ebe254909aecfe59ea97f36ff4cc3",
+      "configs/acceptance.json": "01802a15e5681adb4a298c94af4879386c1daecadc71797a20ca6fefe03c203a",
+      "docs/acceptance-contract.md": "7dccbac2c2a099fc80baea8b4a0ba8537e794d6288b9ed41d5f132f7bdb474f6",
+      "governing_execute/model.py": "2f76c800dc396168d4183fff0101b1aee1ffe0c041625ba968fe92263b739474",
+      "governing_execute/study.py": "4ab1760b5a7b33d996bdd980c3875ae3b01852f4908a75bb27a9bdefe383b404",
+      "scripts/run_acceptance.py": "53eaaa91ec4ebd4f500ba41bed5a659d6b4c8c2a9998b67bdf9129e42afef05b"
+    },
+    "procedure": "Local source freeze after development tests; not preregistration",
+    "version": "0.2.0"
+  }
+}

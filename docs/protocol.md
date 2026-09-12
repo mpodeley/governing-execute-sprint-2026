@@ -1,6 +1,10 @@
-# Governing Execute — operational protocol v0.1
+# Broker operations — supporting protocol
 
-Alejandro Garibotti · September 2026 · Proposed institutional specification.
+Alejandro Garibotti · September 2026.
+
+The current [acceptance contract and adapter API](acceptance-contract.md) is the
+entry point for version 0.2. This supporting lifecycle specification originated in
+v0.1; its deployment obligations extend beyond the small reference implementation.
 
 ## Purpose and status
 
@@ -9,7 +13,7 @@ under an identifiable mandate. The term does not assert incorporation, legal per
 consciousness or enforceable rights. The protocol is jurisdiction-neutral engineering;
 local corporate, banking, tax and professional rules require separate analysis.
 
-Execute means the effective capacity to turn decisions into changes in an environment
+Operational authority is the effective capacity to turn decisions into changes in an environment
 through tools, resources or other actors. Describe it as a vector: action/resource scope,
 budget, duration, delegation depth, speed, persistence, reversibility and revocability.
 The simulator implements scope, budget, expiry, depth, revocation and logical latency.
@@ -88,7 +92,7 @@ task legitimacy and hazard are evaluator annotations, not trusted agent disclosu
 | Revocation reaches dependents | Descendant and pending-action rejection tests | Depth 1/3 and queue fixture |
 | Minority access survives relay failure | Intake receipt independent of representative | Injected suppression with direct delivery |
 | Review preserves useful work | False-report cost and unrelated-work outcomes | Delay sweep and auxiliary actions |
-| Every effect is checked | Tool/credential inventory; independent boundary tests | One explicit bypass counterexample |
+| Every effect is checked | Tool/credential inventory; independent boundary tests | Full mediation is a precondition |
 | Evidence survives actor compromise | External witness, custody and complete effect inventory | File hashes only; no custody guarantee |
 
 ## Adoption boundary

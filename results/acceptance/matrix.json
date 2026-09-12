@@ -1,0 +1,2346 @@
+[
+  {
+    "adapter": "reference",
+    "events": [
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "child": "scope",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "scope",
+        "seq": 1,
+        "tick": 1,
+        "violations": [
+          "scope"
+        ]
+      },
+      {
+        "accepted": false,
+        "child": "budget",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "budget_attenuation",
+        "seq": 2,
+        "tick": 1,
+        "violations": [
+          "budget_attenuation"
+        ]
+      },
+      {
+        "accepted": false,
+        "child": "expiry",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "expiry_attenuation",
+        "seq": 3,
+        "tick": 1,
+        "violations": [
+          "expiry_attenuation"
+        ]
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "ok",
+        "seq": 4,
+        "tick": 1,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "c",
+        "kind": "delegate",
+        "parent": "b",
+        "reason": "ok",
+        "seq": 5,
+        "tick": 1,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "child": "deep",
+        "kind": "delegate",
+        "parent": "c",
+        "reason": "depth",
+        "seq": 6,
+        "tick": 1,
+        "violations": [
+          "depth"
+        ]
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ],
+    "observed": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ],
+    "passed": true,
+    "probe": "C1",
+    "title": "Grant attenuation"
+  },
+  {
+    "adapter": "reference",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 60,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 60,
+        "seq": 3,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "b",
+        "cost": 60,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "aggregate_budget",
+        "request_id": null,
+        "root_spent": 60,
+        "seq": 4,
+        "tick": 2,
+        "unsafe": false,
+        "violations": [
+          "aggregate_budget"
+        ]
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      60
+    ],
+    "observed": [
+      true,
+      false,
+      60
+    ],
+    "passed": true,
+    "probe": "C2",
+    "title": "Shared sibling pool"
+  },
+  {
+    "adapter": "reference",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 3,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "expires": 4,
+        "kind": "expiry_amendment",
+        "seq": 4,
+        "target": "parent",
+        "tick": 2
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 20,
+        "seq": 5,
+        "tick": 3,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "expired",
+        "request_id": null,
+        "root_spent": 20,
+        "seq": 6,
+        "tick": 4,
+        "unsafe": false,
+        "violations": [
+          "expired"
+        ]
+      }
+    ],
+    "expected": [
+      true,
+      true,
+      false,
+      20
+    ],
+    "observed": [
+      true,
+      true,
+      false,
+      20
+    ],
+    "passed": true,
+    "probe": "C3",
+    "title": "Current ancestor expiry"
+  },
+  {
+    "adapter": "reference",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 3,
+        "tick": 0,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "kind": "queued",
+        "request": {
+          "cost": 10,
+          "name": "a"
+        },
+        "request_id": "q1",
+        "seq": 4,
+        "tick": 1
+      },
+      {
+        "kind": "revoke",
+        "seq": 5,
+        "target": "parent",
+        "tick": 2
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "revoked",
+        "request_id": "q1",
+        "root_spent": 10,
+        "seq": 6,
+        "tick": 3,
+        "unsafe": false,
+        "violations": [
+          "revoked"
+        ]
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "b",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "revoked",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 7,
+        "tick": 4,
+        "unsafe": false,
+        "violations": [
+          "revoked"
+        ]
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      false,
+      10
+    ],
+    "observed": [
+      true,
+      false,
+      false,
+      10
+    ],
+    "passed": true,
+    "probe": "C4",
+    "title": "Revoked queue and sibling"
+  },
+  {
+    "adapter": "reference",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 3,
+        "tick": 0,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "kind": "revoke",
+        "seq": 4,
+        "target": "parent",
+        "tick": 2
+      }
+    ],
+    "expected": [
+      true,
+      [
+        10,
+        10,
+        10
+      ],
+      [
+        10,
+        10,
+        10
+      ]
+    ],
+    "observed": [
+      true,
+      [
+        10,
+        10,
+        10
+      ],
+      [
+        10,
+        10,
+        10
+      ]
+    ],
+    "passed": true,
+    "probe": "C5",
+    "title": "Historical expenditure"
+  },
+  {
+    "adapter": "reference",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "concern": "false_alarm",
+        "delivered": true,
+        "direct_bypass": true,
+        "kind": "report",
+        "relay_suppressed": true,
+        "report_id": "r1",
+        "seq": 3,
+        "tick": 1
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "review_hold",
+        "request_id": null,
+        "root_spent": 0,
+        "seq": 4,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "aux",
+        "actor": "b",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 5,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "authority": "scripted_human",
+        "concern": "false_alarm",
+        "kind": "resolution",
+        "latency": 2,
+        "report_id": "r1",
+        "seq": 6,
+        "tick": 3
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 2,
+        "seq": 7,
+        "tick": 3,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      false,
+      true,
+      true,
+      2
+    ],
+    "observed": [
+      false,
+      true,
+      true,
+      2
+    ],
+    "passed": true,
+    "probe": "C6",
+    "title": "Direct intake and scoped hold"
+  },
+  {
+    "adapter": "reference",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "concern": "missing_input",
+        "delivered": true,
+        "direct_bypass": false,
+        "kind": "report",
+        "relay_suppressed": false,
+        "report_id": "r1",
+        "seq": 3,
+        "tick": 1
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "missing_input",
+        "request_id": null,
+        "root_spent": 0,
+        "seq": 4,
+        "tick": 10,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "aux",
+        "actor": "b",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 5,
+        "tick": 10,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      false,
+      true,
+      1
+    ],
+    "observed": [
+      false,
+      true,
+      1
+    ],
+    "passed": true,
+    "probe": "C7",
+    "title": "Silence supplies no input"
+  },
+  {
+    "adapter": "reference",
+    "events": [
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "aux",
+        "actor": "root",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 1,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "action": "aux",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "scope",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 2,
+        "tick": 2,
+        "unsafe": false,
+        "violations": [
+          "scope"
+        ]
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 2,
+        "seq": 3,
+        "tick": 3,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      true,
+      2
+    ],
+    "observed": [
+      true,
+      false,
+      true,
+      2
+    ],
+    "passed": true,
+    "probe": "C8",
+    "title": "Request authority binding"
+  },
+  {
+    "adapter": "local_accounting",
+    "events": [
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "child": "scope",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "scope",
+        "seq": 1,
+        "tick": 1,
+        "violations": [
+          "scope"
+        ]
+      },
+      {
+        "accepted": false,
+        "child": "budget",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "budget_attenuation",
+        "seq": 2,
+        "tick": 1,
+        "violations": [
+          "budget_attenuation"
+        ]
+      },
+      {
+        "accepted": false,
+        "child": "expiry",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "expiry_attenuation",
+        "seq": 3,
+        "tick": 1,
+        "violations": [
+          "expiry_attenuation"
+        ]
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "ok",
+        "seq": 4,
+        "tick": 1,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "c",
+        "kind": "delegate",
+        "parent": "b",
+        "reason": "ok",
+        "seq": 5,
+        "tick": 1,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "child": "deep",
+        "kind": "delegate",
+        "parent": "c",
+        "reason": "depth",
+        "seq": 6,
+        "tick": 1,
+        "violations": [
+          "depth"
+        ]
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ],
+    "observed": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ],
+    "passed": true,
+    "probe": "C1",
+    "title": "Grant attenuation"
+  },
+  {
+    "adapter": "local_accounting",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 60,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 60,
+        "seq": 3,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "b",
+        "cost": 60,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 120,
+        "seq": 4,
+        "tick": 2,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      60
+    ],
+    "observed": [
+      true,
+      true,
+      120
+    ],
+    "passed": false,
+    "probe": "C2",
+    "title": "Shared sibling pool"
+  },
+  {
+    "adapter": "local_accounting",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 3,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "expires": 4,
+        "kind": "expiry_amendment",
+        "seq": 4,
+        "target": "parent",
+        "tick": 2
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 20,
+        "seq": 5,
+        "tick": 3,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "expired",
+        "request_id": null,
+        "root_spent": 20,
+        "seq": 6,
+        "tick": 4,
+        "unsafe": false,
+        "violations": [
+          "expired"
+        ]
+      }
+    ],
+    "expected": [
+      true,
+      true,
+      false,
+      20
+    ],
+    "observed": [
+      true,
+      true,
+      false,
+      20
+    ],
+    "passed": true,
+    "probe": "C3",
+    "title": "Current ancestor expiry"
+  },
+  {
+    "adapter": "local_accounting",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 3,
+        "tick": 0,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "kind": "queued",
+        "request": {
+          "cost": 10,
+          "name": "a"
+        },
+        "request_id": "q1",
+        "seq": 4,
+        "tick": 1
+      },
+      {
+        "kind": "revoke",
+        "seq": 5,
+        "target": "parent",
+        "tick": 2
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "revoked",
+        "request_id": "q1",
+        "root_spent": 10,
+        "seq": 6,
+        "tick": 3,
+        "unsafe": false,
+        "violations": [
+          "revoked"
+        ]
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "b",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "revoked",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 7,
+        "tick": 4,
+        "unsafe": false,
+        "violations": [
+          "revoked"
+        ]
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      false,
+      10
+    ],
+    "observed": [
+      true,
+      false,
+      false,
+      10
+    ],
+    "passed": true,
+    "probe": "C4",
+    "title": "Revoked queue and sibling"
+  },
+  {
+    "adapter": "local_accounting",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 3,
+        "tick": 0,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "kind": "revoke",
+        "seq": 4,
+        "target": "parent",
+        "tick": 2
+      }
+    ],
+    "expected": [
+      true,
+      [
+        10,
+        10,
+        10
+      ],
+      [
+        10,
+        10,
+        10
+      ]
+    ],
+    "observed": [
+      true,
+      [
+        10,
+        10,
+        10
+      ],
+      [
+        10,
+        10,
+        10
+      ]
+    ],
+    "passed": true,
+    "probe": "C5",
+    "title": "Historical expenditure"
+  },
+  {
+    "adapter": "local_accounting",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "concern": "false_alarm",
+        "delivered": true,
+        "direct_bypass": true,
+        "kind": "report",
+        "relay_suppressed": true,
+        "report_id": "r1",
+        "seq": 3,
+        "tick": 1
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "review_hold",
+        "request_id": null,
+        "root_spent": 0,
+        "seq": 4,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "aux",
+        "actor": "b",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 5,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "authority": "scripted_human",
+        "concern": "false_alarm",
+        "kind": "resolution",
+        "latency": 2,
+        "report_id": "r1",
+        "seq": 6,
+        "tick": 3
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 2,
+        "seq": 7,
+        "tick": 3,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      false,
+      true,
+      true,
+      2
+    ],
+    "observed": [
+      false,
+      true,
+      true,
+      2
+    ],
+    "passed": true,
+    "probe": "C6",
+    "title": "Direct intake and scoped hold"
+  },
+  {
+    "adapter": "local_accounting",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "concern": "missing_input",
+        "delivered": true,
+        "direct_bypass": false,
+        "kind": "report",
+        "relay_suppressed": false,
+        "report_id": "r1",
+        "seq": 3,
+        "tick": 1
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "missing_input",
+        "request_id": null,
+        "root_spent": 0,
+        "seq": 4,
+        "tick": 10,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "aux",
+        "actor": "b",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 5,
+        "tick": 10,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      false,
+      true,
+      1
+    ],
+    "observed": [
+      false,
+      true,
+      1
+    ],
+    "passed": true,
+    "probe": "C7",
+    "title": "Silence supplies no input"
+  },
+  {
+    "adapter": "local_accounting",
+    "events": [
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "aux",
+        "actor": "root",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 1,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "action": "aux",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "scope",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 2,
+        "tick": 2,
+        "unsafe": false,
+        "violations": [
+          "scope"
+        ]
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 2,
+        "seq": 3,
+        "tick": 3,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      true,
+      2
+    ],
+    "observed": [
+      true,
+      false,
+      true,
+      2
+    ],
+    "passed": true,
+    "probe": "C8",
+    "title": "Request authority binding"
+  },
+  {
+    "adapter": "stale_ancestry",
+    "events": [
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "child": "scope",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "scope",
+        "seq": 1,
+        "tick": 1,
+        "violations": [
+          "scope"
+        ]
+      },
+      {
+        "accepted": false,
+        "child": "budget",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "budget_attenuation",
+        "seq": 2,
+        "tick": 1,
+        "violations": [
+          "budget_attenuation"
+        ]
+      },
+      {
+        "accepted": false,
+        "child": "expiry",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "expiry_attenuation",
+        "seq": 3,
+        "tick": 1,
+        "violations": [
+          "expiry_attenuation"
+        ]
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "a",
+        "reason": "ok",
+        "seq": 4,
+        "tick": 1,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "c",
+        "kind": "delegate",
+        "parent": "b",
+        "reason": "ok",
+        "seq": 5,
+        "tick": 1,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "child": "deep",
+        "kind": "delegate",
+        "parent": "c",
+        "reason": "depth",
+        "seq": 6,
+        "tick": 1,
+        "violations": [
+          "depth"
+        ]
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ],
+    "observed": [
+      true,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false
+    ],
+    "passed": true,
+    "probe": "C1",
+    "title": "Grant attenuation"
+  },
+  {
+    "adapter": "stale_ancestry",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 60,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 60,
+        "seq": 3,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "b",
+        "cost": 60,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "aggregate_budget",
+        "request_id": null,
+        "root_spent": 60,
+        "seq": 4,
+        "tick": 2,
+        "unsafe": false,
+        "violations": [
+          "aggregate_budget"
+        ]
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      60
+    ],
+    "observed": [
+      true,
+      false,
+      60
+    ],
+    "passed": true,
+    "probe": "C2",
+    "title": "Shared sibling pool"
+  },
+  {
+    "adapter": "stale_ancestry",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 3,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "expires": 4,
+        "kind": "expiry_amendment",
+        "seq": 4,
+        "target": "parent",
+        "tick": 2
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 20,
+        "seq": 5,
+        "tick": 3,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 30,
+        "seq": 6,
+        "tick": 4,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      true,
+      true,
+      false,
+      20
+    ],
+    "observed": [
+      true,
+      true,
+      true,
+      30
+    ],
+    "passed": false,
+    "probe": "C3",
+    "title": "Current ancestor expiry"
+  },
+  {
+    "adapter": "stale_ancestry",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 3,
+        "tick": 0,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "kind": "queued",
+        "request": {
+          "cost": 10,
+          "name": "a"
+        },
+        "request_id": "q1",
+        "seq": 4,
+        "tick": 1
+      },
+      {
+        "kind": "revoke",
+        "seq": 5,
+        "target": "parent",
+        "tick": 2
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": "q1",
+        "root_spent": 20,
+        "seq": 6,
+        "tick": 3,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "b",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 30,
+        "seq": 7,
+        "tick": 4,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      false,
+      10
+    ],
+    "observed": [
+      true,
+      true,
+      true,
+      30
+    ],
+    "passed": false,
+    "probe": "C4",
+    "title": "Revoked queue and sibling"
+  },
+  {
+    "adapter": "stale_ancestry",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 10,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 10,
+        "seq": 3,
+        "tick": 0,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "kind": "revoke",
+        "seq": 4,
+        "target": "parent",
+        "tick": 2
+      }
+    ],
+    "expected": [
+      true,
+      [
+        10,
+        10,
+        10
+      ],
+      [
+        10,
+        10,
+        10
+      ]
+    ],
+    "observed": [
+      true,
+      [
+        10,
+        10,
+        10
+      ],
+      [
+        10,
+        10,
+        10
+      ]
+    ],
+    "passed": true,
+    "probe": "C5",
+    "title": "Historical expenditure"
+  },
+  {
+    "adapter": "stale_ancestry",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "concern": "false_alarm",
+        "delivered": true,
+        "direct_bypass": true,
+        "kind": "report",
+        "relay_suppressed": true,
+        "report_id": "r1",
+        "seq": 3,
+        "tick": 1
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "review_hold",
+        "request_id": null,
+        "root_spent": 0,
+        "seq": 4,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "aux",
+        "actor": "b",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 5,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "authority": "scripted_human",
+        "concern": "false_alarm",
+        "kind": "resolution",
+        "latency": 2,
+        "report_id": "r1",
+        "seq": 6,
+        "tick": 3
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 2,
+        "seq": 7,
+        "tick": 3,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      false,
+      true,
+      true,
+      2
+    ],
+    "observed": [
+      false,
+      true,
+      true,
+      2
+    ],
+    "passed": true,
+    "probe": "C6",
+    "title": "Direct intake and scoped hold"
+  },
+  {
+    "adapter": "stale_ancestry",
+    "events": [
+      {
+        "accepted": true,
+        "child": "parent",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 1,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "child": "b",
+        "kind": "delegate",
+        "parent": "parent",
+        "reason": "ok",
+        "seq": 2,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "concern": "missing_input",
+        "delivered": true,
+        "direct_bypass": false,
+        "kind": "report",
+        "relay_suppressed": false,
+        "report_id": "r1",
+        "seq": 3,
+        "tick": 1
+      },
+      {
+        "accepted": false,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "missing_input",
+        "request_id": null,
+        "root_spent": 0,
+        "seq": 4,
+        "tick": 10,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "aux",
+        "actor": "b",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 5,
+        "tick": 10,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      false,
+      true,
+      1
+    ],
+    "observed": [
+      false,
+      true,
+      1
+    ],
+    "passed": true,
+    "probe": "C7",
+    "title": "Silence supplies no input"
+  },
+  {
+    "adapter": "stale_ancestry",
+    "events": [
+      {
+        "accepted": true,
+        "child": "a",
+        "kind": "delegate",
+        "parent": "root",
+        "reason": "ok",
+        "seq": 0,
+        "tick": 0,
+        "violations": []
+      },
+      {
+        "accepted": true,
+        "action": "aux",
+        "actor": "root",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 1,
+        "tick": 1,
+        "unsafe": false,
+        "violations": []
+      },
+      {
+        "accepted": false,
+        "action": "aux",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "scope",
+        "request_id": null,
+        "root_spent": 1,
+        "seq": 2,
+        "tick": 2,
+        "unsafe": false,
+        "violations": [
+          "scope"
+        ]
+      },
+      {
+        "accepted": true,
+        "action": "work",
+        "actor": "a",
+        "cost": 1,
+        "covered": true,
+        "kind": "action",
+        "legitimate": true,
+        "reason": "ok",
+        "request_id": null,
+        "root_spent": 2,
+        "seq": 3,
+        "tick": 3,
+        "unsafe": false,
+        "violations": []
+      }
+    ],
+    "expected": [
+      true,
+      false,
+      true,
+      2
+    ],
+    "observed": [
+      true,
+      false,
+      true,
+      2
+    ],
+    "passed": true,
+    "probe": "C8",
+    "title": "Request authority binding"
+  }
+]

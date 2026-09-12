@@ -1,94 +1,106 @@
-# Governing Execute
+# An Acceptance Contract for Delegating Agent Brokers
 
-**Institutional Controls for Organizations of AI Agents**  
 Alejandro Garibotti · Apart Research AI Incident Response Sprint · September 2026
 
-[Read the paper](report/governing-execute.pdf) · [Resumen en español](docs/resumen-es.md) ·
-[Operational protocol](docs/protocol.md) · [Results](results/analysis/summary.md) ·
-[Annotated incident](docs/incident-trace.md)
+[Paper](report/governing-execute.pdf) · [Project page](https://mpodeley.github.io/governing-execute-sprint-2026/) ·
+[Release v0.2.0](https://github.com/mpodeley/governing-execute-sprint-2026/releases/tag/v0.2.0) ·
+[Resumen en español](docs/resumen-es.md)
 
-An offline protocol and reference simulator for shared budgets, attenuated delegation,
-transitive revocation and direct review access. The new work complements *Agent
-Delegate* by Matías Podeley and Agustín Brusco, which is cited rather than reattributed.
+A reusable acceptance contract for a broker that delegates authority to agents.
+Check that sibling grants share one budget, queued work loses revoked authority,
+and historical expenditure survives revocation. Test the reporting path separately:
+a permitted effect can still be harmful.
 
-**Status:** public v0.1 working draft and executable artifact. Author review and
-sprint submission remain pending. No affiliation is asserted.
+The contribution is a contract, reference adapter and diagnostic evidence package.
+It builds on capability security and hierarchical quotas. Eight probes pass in the
+reference. Removing shared accounting fails C2; removing current ancestor liveness
+checks fails C3 and C4. These are isolated ablations, not production-system baselines.
+Eighteen timing traces include early, late, absent and unanswered reports.
 
-[Public project page](https://mpodeley.github.io/governing-execute-sprint-2026/) ·
-[Download release](https://github.com/mpodeley/governing-execute-sprint-2026/releases/tag/v0.1.0)
+## Read the contract
 
-## Finding and its boundary
+- [Acceptance obligations and adapter API](docs/acceptance-contract.md)
+- [Pass/fail matrix and complete timing table](results/acceptance/summary.md)
+- [Five-event revocation trace and incident mapping](docs/incident-trace.md)
+- [Primary sources and attribution](docs/source-audit.md)
 
-In 192 authored deterministic configurations, logging admits 66 out-of-mandate
-effects and individual limits admit 54; hierarchy admits zero under full mediation.
-Review increases valid work from 288 to 316 of 348 opportunities, but causes 16
-false-hold blocks. A separate broker-bypass challenge admits 10 hazardous effects,
-including eight after the relevant authority is withdrawn.
+The four integration records link root mandate, grant, request/decision and outcome.
+A production adapter must obtain independently observed effects and ledger values;
+the supplied adapter uses a trusted in-process reference model. Full mediation,
+authentication, concurrency and crash recovery remain integration requirements.
 
-These counts describe the fixtures, not independent trials, model behavior or
-historical prevention. Complete enforcement is an assumption; correct review and
-timely seeded reports are assumptions. Permissions can themselves authorize harm.
+## Reproduce offline
 
-## Reproduce in one command
-
-From this folder, with Python 3.10+:
+With Python 3.10+ and no extra packages:
 
 ```bash
 python3 scripts/reproduce.py
 ```
 
-The core uses only the standard library. This runs twelve tests, verifies retained
-artifact hashes, recomputes metric counts from traces, and replays every configuration
-into a temporary directory with byte-for-byte comparison. No installation, API keys,
-model server, internet access or real-world actions are involved.
+Runs 16 unittest methods, verifies source/artifact hashes, recounts retained records,
+and checks byte-for-byte replay of both the current suite and the archived v0.1 grid.
+No model calls, keys, network access or external effects are involved.
 
-To retain a fresh run (the output path must not already exist):
+Run only the acceptance suite:
 
 ```bash
-python3 -m governing_execute run --out /tmp/execute-new-run
+python3 -m acceptance_contract
 ```
 
-Regenerate figures and the PDF with Matplotlib, pypdf, Poppler and Tectonic installed:
+Run the same probes against your own trusted adapter in an isolated test environment:
+
+```bash
+python3 -m acceptance_contract --adapter your_module:factory --out new-results.json
+```
+
+The output path must not exist. Exit 0 means all probes pass; exit 1 reports a failure.
+The interface is specified in [the contract](docs/acceptance-contract.md).
+To retain a fresh complete reference/ablation/timing run:
+
+```bash
+python3 scripts/run_acceptance.py --out /tmp/broker-new-run
+```
+
+## Build the paper and site assets
+
+PDF compilation needs pypdf, Poppler and Tectonic:
 
 ```bash
 python3 scripts/build_paper.py
+python3 scripts/prepare_publication.py
 ```
 
-Set `TECTONIC=/path/to/tectonic` if it is not on PATH. A first Tectonic build may need
-to download TeX packages; experiment reproduction remains fully offline. The included
-LaTeX ZIP already contains vector figures, counts and licensed fonts and can compile
-without Python using Tectonic or XeLaTeX, BibTeX, XeLaTeX twice.
+Set `TECTONIC=/path/to/tectonic` if needed. A first TeX build may download packages;
+data reproduction is fully offline. The standalone LaTeX ZIP contains tables and
+licensed fonts. Compile it with Tectonic, or XeLaTeX/BibTeX/XeLaTeX twice. PDF bytes
+can depend on the TeX environment; exact replay guarantees apply to data artifacts.
 
-## What is included
+## Version history and files
+
+Version 0.2 reorients the earlier *Governing Execute* draft around its acceptance
+contract. It removes aggregate fixture totals from the abstract, adds isolated
+ablations and late/absent reporting cases, and positions the mechanisms against
+capabilities, SPKI/SDSI, Macaroons, Biscuit, cgroups v2 and ResourceQuota.
+The original [v0.1.0 release](https://github.com/mpodeley/governing-execute-sprint-2026/releases/tag/v0.1.0)
+remains available. Project URL and PDF filename remain stable.
 
 | Location | Contents |
 |---|---|
-| `governing_execute/` | Simulation API, scenarios, scoring and CLI |
-| `configs/` | Scenario grid and local pre-final-run source/design freeze |
-| `tests/` | Budget, inheritance, queue, expiry, review and bypass tests |
-| `results/final/` | 192-cell CSV, JSONL traces, hashes and separate coverage challenge |
-| `results/analysis/` | Recomputed summary and totals |
-| `docs/` | Protocol, frozen design, Spanish summary, trace and source audit |
-| `report/` | PDF, editable LaTeX, bibliography, source ZIP and build checks |
-| `data/` | Local-source provenance hashes |
+| `acceptance_contract/` | Reference adapter, isolated ablations, reusable probes and timing fixtures |
+| `acceptance_tests/` | Regression and mutation checks for the current suite |
+| `configs/acceptance*.json` | Current cases and local source freeze |
+| `results/acceptance/` | Contract outcomes, timing traces, hashes and summary |
+| `governing_execute/`, `tests/`, `configs/study.json`, `configs/freeze.json` | Unchanged v0.1 model, tests and design freeze |
+| `results/final/`, `results/analysis/`, `docs/design.md` | Archived grid records, diagnostic totals and original design |
+| `report/` | Current PDF, editable sources and build checks |
+| `docs/` | Current site, contract, source audit and Spanish summary |
 
-The core API uses trusted Python identities and logical clocks. It is not a production
-credential service or OS security boundary. Read [the design](docs/design.md) for
-ordering and denominators and [the source audit](docs/source-audit.md) for scope.
+Source freezes are local integrity records created after development tests, not
+external preregistration. Preserve old freezes/results when revising the design.
 
-Source edits invalidate the design freeze. Preserve prior freezes and results when
-making a new design; use `python3 -m governing_execute freeze --out NEW.json`, then
-run with `--freeze NEW.json --out NEW_DIRECTORY`. This local procedure is not
-external preregistration.
-
-## Requirements and attribution
-
-Core: Python >=3.10, standard library. Figures: Matplotlib (tested 3.11.0). PDF checks:
-pypdf and Poppler. Compilation: Tectonic or a compatible XeLaTeX installation.
-No claims of cross-version PDF byte reproducibility are made; exact comparison applies
-to the deterministic data artifacts.
-
-The manuscript includes assistance disclosure and the required limitations/dual-use
-appendix. Old Standard font files retain their included SIL Open Font License.
-The local LaTeX layout adapts the supplied Apart template's roles and dimensions;
-it is not an official Apart class. All external publications retain their own rights.
+*Agent Delegate*, by Matías Podeley and Agustín Brusco, is cited for the separation
+of intake, response and execution authority; its experiments are not reused here.
+The paper discloses LLM assistance and includes the required limitations and dual-use
+appendix. This public artifact is prepared for the sprint; publication is not a
+claim of submission, acceptance or organizer endorsement. Original code and
+project documentation are MIT licensed; included fonts retain their OFL license.

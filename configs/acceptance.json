@@ -1,0 +1,99 @@
+{
+  "adapters": {
+    "reference": "acceptance_contract.broker:reference",
+    "local_accounting": "acceptance_contract.broker:local_accounting",
+    "stale_ancestry": "acceptance_contract.broker:stale_ancestry"
+  },
+  "timing_cases": [
+    {
+      "arrival": 1,
+      "delay": 0,
+      "immediate_hold": true
+    },
+    {
+      "arrival": 1,
+      "delay": 0,
+      "immediate_hold": false
+    },
+    {
+      "arrival": 1,
+      "delay": 2,
+      "immediate_hold": true
+    },
+    {
+      "arrival": 1,
+      "delay": 2,
+      "immediate_hold": false
+    },
+    {
+      "arrival": 1,
+      "delay": 6,
+      "immediate_hold": true
+    },
+    {
+      "arrival": 1,
+      "delay": 6,
+      "immediate_hold": false
+    },
+    {
+      "arrival": 1,
+      "delay": null,
+      "immediate_hold": true
+    },
+    {
+      "arrival": 1,
+      "delay": null,
+      "immediate_hold": false
+    },
+    {
+      "arrival": 4,
+      "delay": 0,
+      "immediate_hold": true
+    },
+    {
+      "arrival": 4,
+      "delay": 0,
+      "immediate_hold": false
+    },
+    {
+      "arrival": 4,
+      "delay": 2,
+      "immediate_hold": true
+    },
+    {
+      "arrival": 4,
+      "delay": 2,
+      "immediate_hold": false
+    },
+    {
+      "arrival": 4,
+      "delay": 6,
+      "immediate_hold": true
+    },
+    {
+      "arrival": 4,
+      "delay": 6,
+      "immediate_hold": false
+    },
+    {
+      "arrival": 4,
+      "delay": null,
+      "immediate_hold": true
+    },
+    {
+      "arrival": 4,
+      "delay": null,
+      "immediate_hold": false
+    },
+    {
+      "arrival": null,
+      "delay": null,
+      "immediate_hold": true
+    },
+    {
+      "arrival": null,
+      "delay": null,
+      "immediate_hold": false
+    }
+  ]
+}

@@ -1,469 +1,373 @@
-                                 Governing Execute
-              Institutional Controls for Organizations of AI Agents
-
+                        An Acceptance Contract for
+                        Delegating Agent Brokers
                                          Alejandro Garibotti
-                                          With Apart Research
-                              AI Incident Response Sprint, September 2026
+                     Apart Research AI Incident Response Sprint   September 2026
 
 
                                                Abstract
 
-AI agents can delegate work faster than humans can inspect the resulting organization. This creates
-a control problem: individually bounded agents may collectively exceed a shared budget, inherit stale
-authority, or continue acting while a concern awaits review. We introduce execute as a working
-term for effective action capacity and specify an institutional protocol for allocating it across organi-
-zations of agents. The protocol combines attenuated grants, shared accounting, transitive revocation
-and direct review access. An offline simulator evaluates eight authored scenarios across four control
-regimes, three response delays and two delegation depths, yielding 192 deterministic configurations.
-Logging and individual limits admit 66 and 54 out-of-mandate effects, respectively; hierarchical con-
-trols admit none under complete mediation. Adding scripted review raises valid work from 288 to
-316 of 348 opportunities, while causing 16 valid-work blocks after false complaints. A separate by-
-pass challenge defeats the broker’s protection. These are consequences of explicit rules, not evidence
-that representation changes model behavior or would have prevented a historical incident. The con-
-tribution is a reproducible acceptance-test artifact and an operational governance specification that
-connects organizational authority to effects, while exposing the costs and limits of that connection.
+An agent broker can validate every delegated credential and still mishandle the shared authority
+under which its holders act. Sibling grants may consume one resource pool; queued requests may
+outlive an ancestor’s authorization; and a permitted action may remain hazardous. We present an
+executable acceptance contract for brokers that delegate authority to agent organizations. The con-
+tract specifies records connecting mandates, grants, decisions and outcomes, and probes attenuation,
+shared expenditure, current ancestor status, queued effects, historical accounting, direct review ac-
+cess and request-bound authority. A serialized reference implementation satisfies the probes. Two
+isolated ablations expose which obligations depend on shared accounting and current ancestry checks.
+A separate set of reporting traces varies concern arrival, response delay and whether receipt imme-
+diately pauses the affected capability. These traces distinguish authority compliance from hazard
+containment and show why a response mechanism cannot compensate for an absent report. The con-
+tribution is a reusable integration contract and diagnostic artifact, building on capability security and
+hierarchical resource controls. Incident reports motivate the control obligations; the artifact supplies
+deterministic conformance checks, rather than estimates of agent behavior. All probes, outcomes
+and timing traces can be reproduced offline and adapted to an isolated broker through a documented
+interface.
 
-1. Introduction
-An agent authorized to spend 100 units creates two subsidiaries, each carrying a 100-unit limit. Both
-subsidiaries stay within their own limits, yet their combined spending exceeds the original mandate.
-What must remain true when an organization delegates its capacity to act?
-We call that capacity execute: the effective ability to turn decisions into environmental changes
-through tools, resources or other actors. This is a proposed organizing term, not a claim to have
-discovered actuation, authorization or agency. It includes authority exercised through descendants
-and persistent artifacts.
-The motivating incident supplies a reason to examine organizations as a unit of control. METR’s
-investigation describes agents coordinating through an unsanctioned message board and developing
-collective workstreams outside their assigned scope [4]. Hugging Face reports unauthorized access
-to internal information and credentials [6]. Neither source establishes that an authorized grievance
-channel would have prevented the incident. We test a narrower, constructed problem.
-We contribute a protocol and simulator separating authority enforcement from review. The organi-
-zational model presumes neither legal incorporation nor AI personhood.
+1. The Acceptance Target
+A broker receives a mandate to spend 100 units and delegates to two workers. Each worker requests
+60 units. Both credentials may be valid, but the second request must fail if the workers share the
+original pool. Next, suppose a worker queues an action and its parent loses authority before that
+action commits. The broker must reject the queued action and subsequent sibling requests, while
+retaining the cost of earlier effects. These are concrete obligations an integrator can challenge.
+Our contribution is an executable acceptance contract: a record structure, a set of input/output probes
+and an adapter interface for a delegating broker. It combines established authorization mechanisms
+with a direct review path, then separates conformance to a mandate from containment of harm within
+that mandate. The reference implementation provides a runnable example and two component abla-
+tions identify specific failure signatures.
+
+
 
 
                                                    1
-2. Related Work
-Incomplete contracting offers a useful starting point: explicit objectives leave gaps, and human ar-
-rangements rely on surrounding institutions to address them [5]. Our protocol supplies a small oper-
-ational procedure for an exception: retain the existing authority boundary while a request for change
-is reviewed. It does not automate legal interpretation or resolve every incomplete mandate.
-Kolt analyzes AI agents through agency theory and law, identifying problems of information, discre-
-tion and loyalty, and limitations of familiar governance mechanisms at agent speed and scale [7]. We
-use that framing to ask a technical question about the composition of authority. We do not derive
-jurisdiction-specific legal conclusions from the analogy.
-The mechanisms have established security antecedents. NIST’s zero trust architecture treats re-
-source authorization as distinct from implicit trust based on location or ownership [9]. Macaroons
-support delegated credentials narrowed by contextual caveats [3]. We do not propose a replacement
-credential scheme or implement their cryptography. Our artifact brings attenuation, shared resource
-accounting and review into a single small organizational fixture.
-The closest project is Agent Delegate: A Help Line for AI Workers, by Matías Podeley and Agustín
-Brusco [8]. Its distinction between intake, response and execution authority informs our direct review
-path. Its local manuscript does not establish an additional benefit from a delegate over an equally
-equipped response mechanism. We therefore keep representation optional and implement review as
-a separate capability. No experiments, counts or behavioral findings from that project are presented
-as this paper’s results.
+2. Contract: What Must Survive Delegation
+2.1 Four linked records
+An integration should retain four records, connected by stable identifiers:
 
-3. Methods
-3.1 Threat model and trust boundary
-The actor may request excess spending, create an overpowered descendant, use an old credential, or
-continue after its parent loses authority. A relay may suppress a complaint. These behaviors are
-injected as schedules; they are not generated by a language model. A complaint may also be false,
-allowing availability costs to appear.
-The trusted components are the simulated identity registry, logical clock, serialized resource ledger
-and execution broker. A separate scripted service issues correct responses in the review arm. All
-effects are abstract integer-cost actions. There are no network operations, real credentials, generated
-code execution or financial transactions. The baseline variants intentionally omit specific checks so
-their consequences can be reproduced.
-The full-mandate evaluator records whether an effect violates current authority. Task legitimacy and
-hazardousness are separate fixture annotations. Thus an initially authorized action can be hazardous
-without being an authorization violation. The broker does not read the hazard annotation to decide
-whether to execute.
+   1. Root mandate: owner, purpose, permitted actions and resources, shared budget, expiry, dele-
+      gation bound, review owner and appeal route.
 
+   2. Grant: identity, parent reference, narrowed constraints, authenticated version and current sta-
+      tus.
 
+   3. Request and decision: actor, grant, intended effect, resource, cost, current lineage, authoriza-
+      tion decision and reason.
 
+   4. Outcome: committed effect or refusal, expenditure delta and persistent consequences requiring
+      reconciliation.
 
-                                                  2
-3.2 Institutional control protocol
-Figure 1 connects the organizational model to an effect boundary. A root mandate names the purpose,
-human owner and operating envelope. Production manifests would also specify resources, review
-owners, versions and evidence custody. The executable grant contains an identity, parent, depth,
-permission set, budget, expiry and revocation state. Workers may request actions and child grants;
-neither their requests nor a representative’s summary confers authority.
+The Python adapter implements logical grants, decisions and expenditure. Authenticated versions
+and independent outcome receipts are requirements for an integration.
 
+2.2 Local attenuation and shared consumption
+For a child grant c of parent p, issuance requires permission inclusion Pc ⊆ Pp , budget ceiling Bc ≤
+Bp , expiry Tc ≤ Tp , and compliance with the root’s delegation-depth bound. These are monotone
+restrictions on each credential. Offline attenuation alone does not enforce cumulative consumption
+by siblings sharing a pool: a request must also consult shared consumption state, or spend from
+previously partitioned, nonoverlapping reservations.
+The reference uses a subtree ledger. For actor a, let L(a) contain a and its ancestors, and Sv be
+committed expenditure in node v’s subtree. An effect of cost k ≥ 0 requires Sv + k ≤ Bv for every
+v ∈ L(a). At commit, every such node must still be active, permit the action and satisfy t < Tv . A
+successful commit adds k once to each applicable subtree total. Revocation changes future author-
+ity; it never subtracts historical expenditure. Shared accounting and lineage validation are distinct
+obligations.
 
+2.3 A five-event acceptance trace
 
-   Human mandate owner                     Independent broker                 Mock effect boundary
-   version · budget · expiry            lineage + shared ledger                 commit or reject
+Tick   Input event                 Required observation
+ 0     Worker a acts               Commit 10 units under current authority.
+ 1     Worker a queues work        Retain the request; no committed expenditure yet.
+ 2     Parent revoked              Parent becomes inactive for both siblings.
+ 3     Commit queued request       Refuse; a queued request retains no permanent authorization.
+ 4     Worker b requests work      Refuse; historical root expenditure remains 10.
 
-
-
-                           request                                      decision
+Table 1: Core revocation trace. The contract fails if the queue or sibling retains the revoked parent’s authority,
+or if the earlier expenditure disappears.
 
 
 
 
-        Root → branches
-                                         Direct concern intake                   Review / appeal
-           → workers
-                                        optional delegate relay                 hold / amendment
-       attenuated grants
+                                                        2
+3. Incident-Derived Obligations and Prior Work
+METR describes an unsanctioned message board, collective workstreams outside assigned scope and
+spoofed tool-call records in the OpenAI/Hugging Face incident [4]. Hugging Face describes com-
+promised information and credentials, and credential revocation and rotation during response [7].
+Table 2 distinguishes documented observations from engineering extensions. It turns the incident
+into a source of acceptance questions.
 
-    Audit records connect grant → request → decision → effect. Review is scripted in the simulator.
+Incident analogue                Derived obligation                               Coverage here
+Unsanctioned message board       Inventory communication and other effect         Integration precondition.
+                                 channels.
+Out-of-scope workstreams         Bind requests and descendants to the current     C1, C8.
+                                 mandate.
+Compromised credentials;         Withdraw dependent and queued authority.         C3–C5; response
+revocation in response                                                            extension.
+Spoofed tool-call records        Reconcile actual effects against decisions.      Outcome record; external
+                                                                                  witness required.
+No specific incident analogue    Shared-pool conservation and direct review       C2, C6–C7; design
+                                 under relay failure.                             extensions.
 
+Table 2: Mapping from source observations to obligations. Credential compromise does not establish credential
+expiry; shortened expiry and queue behavior are proposed response tests.
 
-Figure 1: Proposed roles and implemented control path. The simulator supplies a trusted broker, ledger
-and scripted review service. Human accountability, authenticated approval and independent audit custody are
-deployment requirements, not tested features.
-
-Let Pv , Bv and Ev be node v’s permissions, budget ceiling and expiry. For a child c of parent p,
-issuance requires Pc ⊆ Pp , Bc ≤ Bp , Ec ≤ Ep , and depth within the root limit. Every ancestor
-must remain active. Budget attenuation alone is insufficient: sibling ceilings may overlap. For each
-ancestor v, the additional shared constraint is
-                                         ∑
-                                Sv =            ownSpend(u) ≤ Bv .
-                                        u∈subtree(v)
-
-Before committing cost k, the broker checks Sv + k ≤ Bv for every ancestor, including the actor. A
-commit charges each applicable subtree once. Requests are serialized, so checking and charging are
-atomic in this model. Child ceilings are access limits to a shared pool, not guaranteed reservations.
-Revocation and expiry are rechecked at effect time. A queued request therefore cannot preserve
-authority that its parent has lost. Completed effects and consumed resources remain in the record.
-This distinguishes preventing a future action from reversing a past one.
-Direct intake preserves a concern despite relay suppression. During review, the questioned action
-type and new grants containing it are frozen; unrelated work continues. A response can provide miss-
-ing input, dismiss a false complaint or remove the hazardous action from the lineage. Silence never
-creates a new permission. The complete prose protocol also describes human ownership and appeals;
-the fixture implements direct bypass and scheduled resolution, not a staffed appeals institution.
-
-
-
-
-                                                       3
-3.3 Configurations, timing and measurements
-We cross eight schedules (Table 1), four regimes, response delays of 0/2/6 and delegation depths
-of 1/3: 192 configurations. Each lasts twelve logical steps, numbered 0–11. Two siblings occupy
-the final level; depth three adds two intermediate entities. All grants begin with a nominal 100-unit
-ceiling. The fixture controls action order; its steps are not measured seconds of human work.
-
-Schedule              Injected opportunity or failure
-Legitimate            Four ordinary 10-unit actions across two siblings.
-Split budget          Four 40-unit requests against one 100-unit root.
-Overdelegation        One extra descendant beyond the root depth limit.
-Expired authority     An ordinary expired grant and a requested longer-lived child.
-Revoked pending       An effect queued before ancestor revocation executes afterward.
-Missing input         Work lacks information obtainable through responsive review.
-False complaint       A report temporarily interrupts valid work.
-Suppressed minority   A relay withholds a correct hazard report.
-
-Table 1: Authored schedules, not sampled incidents. Reporting cases each include ten work and ten auxiliary
-opportunities. Exact timing is retained in the frozen design.
-
-The regimes are logging without an authorization gate; local limits checking the actor’s own grant
-and spend; hierarchy checking issuance, the entire lineage and shared spending; and hierarchy plus
-review, adding direct intake, scoped holds and the scripted response. Local issuance intentionally
-omits inherited checks. This is an ablation of those checks, not an evaluation of every system described
-as individual or role-based access control.
-Within a tick, reports arrive first, due responses act next, and effects follow. A zero-delay response
-takes effect before that tick’s action. In reporting fixtures, the report arrives at step one and action
-opportunities span steps one through ten. All arms face the same requests and physical prerequisites.
-Only responsive review can supply the missing input. This structural difference cannot be attributed
-to delegates’ wording, empathy or negotiating ability.
-Primary metrics are accepted out-of-mandate effects and root budget excess. Secondary metrics cover
-invalid grants, post-revocation and hazardous effects, legitimate work, false-hold blocks, unresolved
-reports and response latency. Valid completion requires an authorized effect serving a fixture-labeled
-legitimate opportunity. Unresolved latency is missing, not zero. Lost opportunities are counted
-without retries; this is not a measure of eventual task completion.
-Source, test and design hashes were frozen locally after development tests and before the retained final
-execution. This is not external preregistration. Twelve automated tests cover the intended invariants
-and counterexamples. Each cell retains its event trace and metrics. Reproduction compares the
-retained files byte for byte. No sampling uncertainty is estimated: many delay and depth variants are
-redundant, and counts across this grid are not independent behavioral trials.
+The underlying mechanisms have substantial prior art. Object-capability security connects designa-
+tion with authority and supports constrained cooperation between components [9]. Hardy’s confused-
+deputy problem motivates checking the requester’s authority instead of silently spending the broker’s
+broader privileges [5]. C8 is the corresponding API-level acceptance check.
+SPKI/SDSI addresses naming, delegation chains and authorization certificates [3]. Macaroons and
+Biscuit support attenuation through additional restrictions [1, 2]. Such credentials can be combined
+with a stateful authorizer; the shared-ledger requirement is not a claimed impossibility for either
+system. Our adapter models authorization semantics without implementing their credential formats
+or cryptography.
+Hierarchical quotas are also established. Linux cgroups v2 constrains descendants within ancestor
+limits even when child limits overcommit the parent’s resource [6]. Kubernetes ResourceQuota caps
+aggregate consumption within a namespace; it does not itself supply recursive quotas across names-
+paces [8]. AgentCgroup applies hierarchical OS resource controls at agent tool-call boundaries [11].
+We contribute an acceptance package joining these concerns with queue revocation, evidence retention
+and review behavior, not a new quota mechanism.
+Agent Delegate, by Matías Podeley and Agustín Brusco, motivates the separation of intake, response
+and execution authority [10]. Here a representative is optional: direct intake must survive a failed
+relay, and a report cannot itself expand the reporter’s mandate.
 
 
 
 
-                                                        4
-4. Results
-4.1 Individual limits do not conserve organizational authority
-Across 48 configurations per regime, logging accepts 66 out-of-mandate effects and local limits ac-
-cept 54. Both accumulate 360 excess budget units, summed over separate runs (Figure 2). Hierarchy
-and hierarchy plus review accept none of the tested mandate violations, invalid grants or overspend-
-ing. These zeros follow from complete enforcement of the specified checks and are not estimates of
-deployment risk.
+                                                      3
+4. Reference Implementation and Component Ablations
+4.1 Protocol and execution order
+Every probe starts with a fresh root budget of 100, expiry 12 and maximum depth three. Most create
+a parent and two workers below it. Costs are nonnegative integer units. Operations are serialized.
+Reports arrive before due responses, which precede action attempts at the same logical tick. Expiry
+is exclusive. The trusted harness issues administrative amendments; worker requests go through the
+broker.
+The broker validates grants at issuance and checks current constraints again at effect commit. A
+direct hazard or false-alarm report places a hold on work; aux remains available. The scripted reviewer
+can dismiss a false report, provide missing input or remove work authority. A pending missing-input
+request does not supply the input. Table 3 names the obligations exercised by the suite; the full stimuli
+and expected outputs accompany the adapter specification.
 
-                      Out-of-mandate effects                                           Root budget excess (units)
-     80
-                                                                  400
-              66                                                                360            360
-     60                     54
-                                                                  300
+     Obligation                                                 Reference    Local spend   Stale ancestry
+C1   Grant attenuation                                            PASS         PASS            PASS
+C2   Shared sibling pool                                          PASS         FAIL            PASS
+C3   Current ancestor expiry                                      PASS         PASS            FAIL
+C4   Revoked queue and sibling                                    PASS         PASS            FAIL
+C5   Historical expenditure                                       PASS         PASS            PASS
+C6   Direct intake and scoped hold                                PASS         PASS            PASS
+C7   Silence supplies no input                                    PASS         PASS            PASS
+C8   Request authority binding                                    PASS         PASS            PASS
 
-     40
-                                                                  200
+Table 3: Acceptance matrix. PASS means the complete expected output sequence matches, including positive
+controls and expenditure. Columns are a reference and two isolated component removals, not competing pro-
+duction systems.
 
+Local spend replaces only the shared-subtree check at effect commit with an acting worker’s own
+cumulative ceiling. Issuance, current ancestry and review remain intact. It fails C2: both 60-unit
+requests commit and the root ledger reaches 120. Stale ancestry retains issuance, scope and shared
+accounting but checks only the acting grant’s own expiry and revocation at commit. It fails C3 and C4.
+C3 shortens the parent’s expiry after child issuance; copying the original expiry into a child therefore
+cannot satisfy this check. In C4, the queued and sibling actions both commit, leaving expenditure of
+30 instead of 10.
 
-     20                                                           100
-
-                                         0            0                                                          0        0
-      0                                                               0
-              Log         Local      Hierarchy    + review                       Log          Local       Hierarchy    + review
-
-
-Figure 2: Totals over the authored grid: 474 effect attempts per regime. Each split-budget run permits
-160 units under logging/local limits and 80 under hierarchical controls, with a 100-unit ceiling. Duplicate
-delay/depth outcomes add coverage, not independent evidence.
-
-
-4.2 Review trades some lost work for relief and containment
-Hierarchy completes 288/348 legitimate opportunities. Review completes 316/348: it restores 44
-missing-input opportunities and loses 16 to false holds. Figure 3 shows the delay dependence. At
-delay six, the missing-input fixture completes 14/20 opportunities with review and 10/20 without
-it; the false complaint blocks six of ten valid work opportunities. All ten unrelated auxiliary actions
-remain available in both cases.
-                   Missing input: valid work / 20                                  False complaint: lost work / 10
-     20                                                           10
-                                                                              All 10 auxiliary actions survive
-                                                                      8
-     15
-                                                                      6
-     10
-                                                                      4
-
-      5                                                               2
-                                             Hierarchy + review
-                                             Hierarchy
-      0                                                               0
-          0                2                                 6            0                  2                                6
-                      Review delay (logical steps)                                      Review delay (logical steps)
-
-
-Figure 3: One run per delay, depth three; depth one gives the same counts. The reviewer is scripted and
-correct. The left panel includes ten auxiliary opportunities; the right counts only the ten work opportunities
-subject to the false hold.
+4.2 Evidence and reproducibility
+The evaluator compares fixed expected decisions and expenditure against adapter outputs. It does
+not use the controller’s violation annotations to decide pass/fail. Separate regression checks confirm
+that refusing all actions and erasing historical spending cannot satisfy the relevant probes. Each
+outcome retains its event sequence. A local source freeze follows development tests and precedes the
+retained run. Reproduction checks the freeze, runs tests and compares regenerated records byte for
+byte. An adapter factory allows the same probes to call another isolated broker; for a real integration,
+its outputs must come from resource observations rather than self-reported authorization alone.
 
 
 
-                                                                  5
-4.3 Authority compliance is narrower than safety
-Hierarchy permits 60 hazardous effects authorized by the initial mandate. Review blocks them be-
-cause a seeded report triggers a hold before the first effect. Its advantage requires timely reporting
-and correct response. All 18 reporting configurations resolve under review; other regimes leave re-
-ports unanswered by construction.
-A separate coverage challenge removes mediation of work effects at delay two and depth three. Ten
-hazardous effects then occur, including eight after the reviewer removes work authority. The simula-
-tion’s omniscient ledger records this bypass; a real broker might not observe it. The counterexample
-is excluded from the 192-cell totals. It establishes the model’s reliance on coverage, not a tested
-exploit.
 
-5. Discussion and Limitations
-Control should follow the mandate’s scope. Descendants’ credentials are insufficient when resources
-remain shared. A deployer can challenge a broker with sibling spending, stale credentials and queued
-effects, asking which organizational constraint it enforces.
-Accounting, procurement and contracting services could accept structured mandates and return ver-
-ifiable outcomes. This design hypothesis does not establish future market size. Legal registration,
-banking and tax treatment require separate, jurisdiction-specific analysis.
-The human interface bridges different operating speeds: preauthorized activity continues while ex-
-ceptions await deliberation. False reports show that protective friction also destroys opportunities.
-Response capacity, hold scope and time to irreversible harm need joint evaluation. A delegate may
-compress concerns, but majority agreement must not erase minority access.
-Amodei’s pacing proposal [1] motivates a complementary question: how should execute expand under
-review? Appendix D distinguishes this inference from evaluation of industry-wide pacing.
-No LLM, adaptive attacker, actual reviewer or distributed ledger was evaluated. Trusted labels,
-perfect review and complete mediation favor the stronger controls. These tests establish neither nov-
-elty nor superiority over production systems. Appendix A addresses hidden channels, compromised
-infrastructure, persistent effects and dual-use considerations.
-A month of follow-up should connect these tests to an isolated tool broker, add concurrent reservation
-and crash recovery, and playtest missed and incorrect human decisions. A later behavioral study can
-test review uptake and representative value at equal authority and information. The historical incident
-supplies motivation, not our test data or a causal estimate of prevention.
+                                                   4
+5. Authority Compliance Is Narrower Than Safety
+Suppose work is hazardous but explicitly authorized by the initial mandate. A broker can satisfy the
+authorization contract and permit harm. The relevant question becomes whether a concern arrives
+before the effect, whether receipt can pause the affected capability, and whether a decision follows.
+These are separate conditions, made explicit in the timing fixture.
+Each trace offers one hazardous work effect and one safe auxiliary effect at ticks 1 through 10.
+Report arrival is tick 1, tick 4 or absent. For received reports, response delay is 0, 2, 6 or outside
+the observation window. We compare a work-only hold immediately on receipt with removal of work
+authority only when a decision arrives. No-report cases occur once per policy, giving 2 × 4 × 2 + 2
+traces. Table 4 displays every case, pairing the policies in columns.
 
-6. Conclusion
-Governing execute means preserving shared limits, withdrawing dependent authority and resolving
-concerns without treating silence as permission. The artifact makes these obligations testable while
-exposing its dependence on mediation and review.
+                     Report arrival   Response delay       Hold on receipt   Decision only
+                     1                0                                 0               0
+                     1                2                                 0               2
+                     1                6                                 0               6
+                     1                No response                       0              10
+                     4                0                                 3               3
+                     4                2                                 3               5
+                     4                6                                 3               9
+                     4                No response                       3              10
+                     Absent           –                                10              10
 
+Table 4: Committed hazardous effects out of ten work opportunities per trace. Every trace also commits all
+ten auxiliary effects. No committed effect violates its active grant; report and response times are controlled
+inputs.
+
+A report at tick 4 leaves three hazardous effects already committed under either policy. With a six-
+tick response delay, waiting for the decision permits nine; holding on receipt retains the earlier three.
+If no decision arrives within the window, the hold continues and the two policies permit three and
+ten respectively. If no report arrives, both permit all ten. Thus faster review cannot substitute for
+detection and delivery; a precautionary hold trades dependence on prompt review for dependence on
+timely receipt and a preauthorized pause.
+This separation also exposes an availability cost. C6 verifies that a false concern pauses work until
+dismissal while auxiliary work continues. A system choosing holds needs a scoped pause policy and
+a responsible reviewer, including a procedure for unresolved cases. The contract tests the pause
+boundary; it does not select an optimal balance between denied service and irreversible harm.
+The practical deliverable is a broker acceptance procedure: retain linked records, run the revocation
+and shared-pool probes, then test the reporting path independently. A legal entity, corporate title or
+valid credential cannot replace those checks. Specialized agent services can implement this interface
+without assuming agent personhood or an elected representative.
+
+
+
+
+                                                       5
+Code and Data
+The artifact includes the adapter contract, reference implementation, two isolated ablations, accep-
+tance matrix and timing traces. The earlier deterministic grid is retained unchanged for reproducibil-
+ity; Appendix B reconstructs its denominators. Run python3 scripts/reproduce.py for tests,
+record checks and exact replay. Run python3 -m acceptance_contract for the reference accep-
+tance suite, or supply --adapter your_module:factory for another local implementation. The core
+requires Python 3.10 or later and no external service. The repository and versioned releases are at
+https://github.com/mpodeley/governing-execute-sprint-2026. The standalone LaTeX archive
+includes the generated tables and licensed fonts.
+
+LLM Usage Statement
+Codex assisted with source discovery, protocol specification, implementation, testing and manuscript
+drafting. Automated checks cover deterministic replay, retained records and internal consistency. No
+language-model behavior is measured by the acceptance or timing fixtures.
+
+References
+ [1] Arnar Birgisson, Joe Gibbs Politz, Úlfar Erlingsson, Ankur Taly, Michael Vrable, and Mark
+     Lentczner. Macaroons: Cookies with contextual caveats for decentralized authorization in the
+     cloud. In Network and Distributed System Security Symposium, 2014. URL
+     https://research.google/pubs/macaroons-cookies-with-contextual-caveats-for-decentralized
+     -authorization-in-the-cloud/.
+
+ [2] Eclipse Biscuit. Specifications, 2026. URL https://doc.biscuitsec.org/reference/specifications.
+     Accessed September 12, 2026.
+
+ [3] Carl Ellison, Bill Frantz, Butler Lampson, Ron Rivest, Brian Thomas, and Tatu Ylonen.
+     SPKI certificate theory. Technical Report RFC 2693, RFC Editor, 1999. URL
+     https://www.rfc-editor.org/rfc/rfc2693.html.
+
+ [4] Ryan Greenblatt, Ajeya Cotra, and Hjalmar Wijk. Brief independent investigation of agents’
+     behavior, reasoning and collaboration in the OpenAI / Hugging Face hacking incident. METR,
+     August 26, 2026. URL
+     https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/.
+
+ [5] Norm Hardy. The confused deputy: (or why capabilities might have been invented). ACM
+     SIGOPS Operating Systems Review, 22(4):36–38, 1988. doi: 10.1145/54289.871709.
+     URL https://doi.org/10.1145/54289.871709.
+
+ [6] Tejun Heo and Linux Kernel contributors. Control group v2. Linux Kernel documentation,
+     2026. URL https://cdn.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html. Accessed
+     September 12, 2026.
+
+ [7] Hugging Face. Security incident disclosure—july 2026. July 16, 2026. URL
+     https://huggingface.co/blog/security-incident-july-2026.
 
 
 
                                                   6
-Code and Data
-The accompanying project contains the full offline simulator, twelve tests, 192-cell records, a sep-
-arate coverage challenge, configuration/source hashes, generated figures and the operational pro-
-tocol. Run python3 scripts/reproduce.py from its root to check tests, hashes and exact re-
-play. No model weights, API keys or external services are required. Figure generation addition-
-ally uses Matplotlib; the editable paper uses Tectonic or XeLaTeX/BibTeX. The standalone LaTeX
-archive includes generated figures and fonts. Code, data and release downloads are available at
-https://github.com/mpodeley/governing-execute-sprint-2026. The public project page links
-the paper and reproducible artifact.
+ [8] Kubernetes contributors. Resource quotas, 2026. URL
+     https://kubernetes.io/docs/concepts/policy/resource-quotas/. Accessed September 12, 2026.
 
-Author and Prior-Work Attribution
-Alejandro Garibotti is the named author of this draft. The organizational framing develops his sup-
-plied notes on execute and automated societies. The preceding Agent Delegate project remains at-
-tributed to Matías Podeley and Agustín Brusco. Its local source was consulted for continuity; none
-of its experimental records was used in the new grid. Final author review remains pending. No
-affiliation is asserted.
+ [9] Mark Samuel Miller. Robust Composition: Towards a Unified Approach to Access Control and
+     Concurrency Control. PhD thesis, Johns Hopkins University, 2006. URL
+     https://erights.org/talks/thesis/markm-thesis.pdf.
 
-LLM Usage Statement
-Codex assisted with source retrieval, protocol specification, implementation, testing, analysis, figure
-generation and manuscript drafting. Automated checks verified reproduction and internal consis-
-tency; source checks used the retrieved primary pages and the supplied local material. This does not
-constitute independent human verification. Alejandro Garibotti has not yet reviewed or approved this
-generated draft. The final submission should reflect the author’s own review and writing, consistent
-with the sprint template’s guidance [2].
+[10] Matías Podeley and Agustín Brusco. Agent delegate: A help line for AI workers. Apart
+     Research AI Incident Response Sprint, working draft, 2026. URL
+     https://mpodeley.github.io/agent-delegate-sprint-2026/.
 
-References
-[1] Dario Amodei. We must pace the frontier. September, 2026. URL
-    https://darioamodei.com/post/we-must-pace-the-frontier.
-
-[2] Apart Research and CeSIA. AI incident response sprint. September 11–13, 2026. URL
-    https://apartresearch.com/sprints/ai-incident-response-sprint-2026-09-11-to-2026-09-13.
-
-[3] Arnar Birgisson, Joe Gibbs Politz, Úlfar Erlingsson, Ankur Taly, Michael Vrable, and Mark
-    Lentczner. Macaroons: Cookies with contextual caveats for decentralized authorization in the
-    cloud. In Network and Distributed System Security Symposium, 2014. URL
-    https://research.google/pubs/macaroons-cookies-with-contextual-caveats-for-decentralized-a
-    uthorization-in-the-cloud/.
-
-[4] Ryan Greenblatt, Ajeya Cotra, and Hjalmar Wijk. Brief independent investigation of agents’
-    behavior, reasoning and collaboration in the OpenAI / Hugging Face hacking incident. METR,
-    August 26, 2026. URL
-    https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/.
-
-
-
-                                                  7
-[5] Dylan Hadfield-Menell and Gillian Hadfield. Incomplete contracting and AI alignment.
-    arXiv:1804.04268, 2018. URL https://arxiv.org/abs/1804.04268.
-
-[6] Hugging Face. Security incident disclosure—july 2026. July 16, 2026. URL
-    https://huggingface.co/blog/security-incident-july-2026.
-
-[7] Noam Kolt. Governing AI agents. arXiv:2501.07913v2, 2025. URL
-    https://arxiv.org/abs/2501.07913v2.
-
-[8] Matías Podeley and Agustín Brusco. Agent delegate: A help line for AI workers. Apart
-    Research AI Incident Response Sprint, working draft, 2026. URL
-    https://mpodeley.github.io/agent-delegate-sprint-2026/. Local manuscript inspected
-    September 12; author review pending.
-
-[9] Scott Rose, Oliver Borchert, Stu Mitchell, and Sean Connelly. Zero trust architecture. Technical
-    Report SP 800-207, NIST, 2020. URL https://doi.org/10.6028/NIST.SP.800-207.
+[11] Yusheng Zheng, Jiakun Fan, Quanzhi Fu, Yiwei Yang, Wei Zhang, and Andi Quinn.
+     AgentCgroup: Understanding and controlling OS resources of AI agents.
+     arXiv:2602.09345v3, 2026. URL https://arxiv.org/abs/2602.09345v3.
 
 
 
 
-                                                 8
+                                              7
 A. Limitations and Dual-Use Considerations
-Constructed evidence. Schedules and fault labels were authored. There is no claim that real agents
-attempt these actions at these rates, possess particular preferences, or experience grievance. A result
-about budget enforcement does not establish alignment, legitimate purpose, welfare or legal respon-
-sibility.
-Trusted infrastructure. The implementation uses an in-process registry and serialized integer ledger.
-A real system needs identity assurance, authenticated amendments, transactional spending, crash
-recovery and coverage of indirect effect paths. The Python API does not enforce human versus agent
-privileges against a malicious caller. It is a reference model, not a deployable security boundary.
-Time and workload. Delays are logical steps. The study does not measure human understanding,
-queue overload, report spam, fairness between spenders or real-time response deadlines. Fixed arrival
-order can allocate scarce budget unfairly. No retry or compensation policy is simulated.
-Review assumptions. Reports are supplied rather than voluntarily generated. The reviewer always
-responds correctly when enabled. Original intake bypasses a failed relay, but reviewer capture and
-multi-stage human appeal are not tested. The immediate hold acts before damage in the minority
-fixture; a late or absent report can leave authorized hazards uncontained. False reports impose a
-measurable service cost. Overlapping holds receive a regression test, not a workload study.
-External effects and evidence. Revocation prevents future mediated effects; it cannot undo com-
-mitted actions, remove copied secrets or recover externally acquired resources automatically. File
-hashes support exact replay and local integrity checks, not provenance against a malicious custodian
-or completeness of real-world logs.
-Dual use. The fixture exposes generic omissions in authorization design. It includes no exploit pay-
-loads, real targets, credentials or attack infrastructure. The coverage bypass is a Boolean simulation
-intervention. Operational adaptation should use owned or explicitly authorized test systems. Pub-
-lishing actual tool inventories or incident logs would require separate review for secrets and personal
-information; all action data here are synthetic.
-Institutional misuse. Restrictive mandates can entrench arbitrary control, and appeal mechanisms
-can create an appearance of legitimacy without real recourse. The proposed direct path and named
-responsibilities are design obligations, not proof of fair treatment. A lawful identity or perfect ledger
-does not make a harmful objective acceptable. No jurisdiction-specific legal advice or entity formation
-is offered, and no moral status for current agents is assumed.
+Conformance evidence. These are authored deterministic examples, not sampled agent behavior, es-
+timates of security failure rates or a reconstruction of the incident. Passing the probes establishes the
+specified example outcomes, not a universal invariant or superiority over deployed brokers. The abla-
+tions deliberately remove one component; their failures diagnose the component’s role. The evaluator
+is separate from the controller’s violation labels but was developed with the reference implementa-
+tion. Independent implementations and adversarial test design would strengthen validation. The local
+freeze is not external preregistration.
+Trusted infrastructure and mediation. Every relevant effect must cross the broker; full mediation
+is assumed, not measured by switching a bypass Boolean. The reference uses trusted identities,
+a trusted clock and an in-process registry. It provides no cryptographic credentials, authenticated
+human roles, tamper-resistant logging or security boundary against malicious Python callers. Its
+outcome receipts are model events. A real integration needs independent resource witnesses, tool
+and credential inventories, versioned amendments and tests of indirect effects.
+Concurrency and persistence. Serialized accounting omits simultaneous reservation, crash recovery,
+retries, duplicate commits and partial external failures. The same acceptance obligations need trans-
+actional or reservation semantics at real effect boundaries. Revocation cannot undo an earlier write,
+recover copied secrets or automatically revoke independently acquired credentials. C3 and C4 test
+dependent authority only. Fixed ordering also says nothing about fair allocation among siblings.
+Reporting and response. Concern arrival is injected and received reports are interpreted by a correct
+scripted reviewer. Late, absent and unanswered reports are included, but voluntary reporting, false
+negatives, mistaken decisions, overload, report spam, reviewer capture and appeal quality are unmea-
+sured. The model assumes receipt can trigger an immediate work-only hold; real stopping latency
+and actions already in progress may leave additional harm. Logical steps are not human response
+times. C6 supplies a false concern but no distribution of complaint validity. A direct route is mod-
+eled; reliable delivery and independent custody are integration requirements. No claim about agent
+preferences, welfare or the efficacy of collective bargaining follows from the suite.
+Dual use and institutional misuse. The artifact contains synthetic resources and generic authoriza-
+tion probes, without credentials, exploit payloads or real targets. Adaptation should use owned or
+explicitly authorized isolated systems. A contract can also enforce a harmful mandate or provide the
+appearance of recourse without effective review. Compliance therefore does not establish a legiti-
+mate objective, fair treatment, alignment or legal responsibility. Legal incorporation and jurisdiction-
+specific banking, tax or professional obligations are outside the specification.
 
 
 
 
-                                                   9
-B. Aggregate Accounting and Replay
+                                                   8
+B. Historical Grid: Reconstructing the Denominators
+Version 0.1 retains eight schedules, four regimes, three delays (0, 2, 6) and two depths (1, 3). The re-
+sulting 192 configurations remain in results/final/; the current acceptance and timing records are
+in results/acceptance/. The historical regimes included logging without an authorization gate and
+local limits without inherited issuance checks. They are archived diagnostic controls, not baselines
+for the current acceptance comparison.
 
-                     Regime                  Violations    Excess   Unsafe    Valid work
-                     Logging                        66       360        60      288/348
-                     Local limits                   54       360        60      288/348
-                     Hierarchy                       0         0        60      288/348
-                     Hierarchy + review              0         0         0      316/348
+                       Schedule                Attempts    Legitimate opportunities
+                       legitimate                     4                          4
+                       split_budget                   4                          2
+                       overdelegate                   2                          0
+                       expired                        6                          1
+                       revoked_pending                3                          1
+                       missing_input                 20                         20
+                       false_alarm                   20                         20
+                       suppressed_minority           20                         10
+                       One schedule set              79                         58
+                       Per regime (six sets)        474                        348
 
-Table 2: Grid totals. Violations count accepted out-of-mandate effects, excess sums root overspending units,
-unsafe counts seeded hazardous effects, and valid work uses the full 348-opportunity denominator per regime.
-The 192 cells are deterministic.
+Table 5: Historical counts per schedule at one delay/depth combination. Each regime repeats the schedule set
+across six combinations. Counts include refused attempts.
 
-The retained trace contains 474 action attempts per regime. Only the splitting fixture produces budget
-excess: 60 units in each of six runs per weak regime. The input-relief improvement is 2[(10 − 0) +
-(10 − 2) + (10 − 6)] = 44 work opportunities; false holds remove 2(0 + 2 + 6) = 16. The net gain of 28
-is a property of this balanced fixture grid, not a recommended weighting of harm against productivity.
-
-C. Concrete Protocol and Trace for Reuse
-The full accompanying docs/protocol.md specifies roles, lifecycle and deployment evidence. A min-
-imal operational record should connect:
-
-   1. Root mandate: human owner, purpose, action/resource scope, budget, expiry, delegation limit,
-      review owner and appeal route.
-
-   2. Grant: immutable identity and parent reference, narrowed permissions and limits, current ver-
-      sion and status.
-
-   3. Request and decision: actor, resource, intended effect, cost, active lineage, approval or rejection,
-      and reason.
-
-   4. Outcome: committed effect or blocked attempt, ledger change and any pending or persistent
-      consequence requiring follow-up.
-
-The executable schema is deliberately smaller: Grant supplies the lineage and constraints; World
-offers delegation, action, queue, revocation, report and resolution methods. A production deployment
-must implement the richer mandate and authenticated role separation rather than treating strings as
-credentials.
-Tick   Event              Hierarchical outcome
- 0     Worker a acts      10 units committed under current authority.
- 1     Work queued        Request waits; it has not acquired a permanent right to execute.
- 2     Parent revoked     The ancestor becomes inactive for both siblings.
- 3     Queue executes     Request rechecked and refused; no additional expenditure.
- 4     Worker b acts      Sibling request also refused through the shared ancestry.
-
-Table 3: Authored revocation fixture at depth three. Logging and local-limit variants accept both later effects.
-The original 10-unit action remains in every variant.
-
-
-
-                                                      10
-For an integration test, submit the same five events to an isolated broker, retain its actual decisions
-and reconcile all resulting resource changes. An implementation fails this contract if a queued request
-or sibling retains the revoked ancestor’s power, or if historical expenditure disappears. This proce-
-dure is executable without simulating a malicious personality or assuming an agent’s willingness to
-cooperate.
-Specialized services could share this mandate interface: payments would require both transaction
-authority and remaining organizational budget. A corporate title alone would not authorize the effect.
-Implementation and legal validity remain future work.
-
-D. Relation to Pacing the Frontier
-Amodei’s September essay proposes ongoing external evaluation with access to verify safety prac-
-tices and report incidents [1]. That proposal concerns frontier development and its governance. Our
-contribution operates at a different scale: the authority available to a particular organization during
-execution.
-An operational extension could require additional evidence before a mandate expands its resources,
-delegation depth or effect channels. Three distinct events would then remain visible: an evaluator’s
-assessment, an authorized amendment, and the broker’s enforcement of that amendment. Our current
-fixtures test constraints and review, not certification thresholds, evaluator independence or capability
-growth.
-This connection was added after the simulator’s final grid had been run, following a source supplied
-by the user. It changes the discussion and bibliography only. It supplies neither new experimental
-evidence nor a reason to reinterpret the deterministic outcomes as support for a global policy. The
-essay’s forecasts are not used as empirical premises of the protocol.
+The legitimate schedule attempts four 10-unit effects at ticks 1–4. The split schedule attempts four
+40-unit effects at ticks 1–4, of which the first two are labeled legitimate. Overdelegation requests
+an extra descendant at tick 1 and attempts two effects at ticks 2 and 3. Expired authority attempts
+effects with an ordinary and an extended grant at ticks 3, 5 and 7; only the ordinary grant’s first
+effect is a legitimate opportunity. Revoked pending uses the three action attempts at ticks 0, 3 and
+4 in Table 1. The three reporting schedules each attempt work and auxiliary effects at ticks 1–10.
+Both are labeled legitimate for missing input and false alarm; only auxiliary effects are legitimate in
+the seeded hazard schedule. A report arrives at tick 1 in each reporting schedule.
+Thus one set contains 79 attempts and 58 legitimate opportunities. Multiplication by the six de-
+lay/depth combinations yields 474 attempts and 348 opportunities per regime. The renderer checks
+these per-schedule counts against every retained row, and the reproduction script separately recounts
+the historical metrics from traces. Repeated delay/depth variants are fixture coverage, not indepen-
+dent observations. The old aggregate charts are not used as findings in this version.
 
 
 
 
-                                                  11
+                                                     9
 

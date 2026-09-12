@@ -1,18 +1,18 @@
-AI agents can delegate work faster than humans can inspect the resulting organization.
-This creates a control problem: individually bounded agents may collectively exceed a
-shared budget, inherit stale authority, or continue acting while a concern awaits review.
-We introduce execute as a working term for effective action capacity and specify an
-institutional protocol for allocating it across organizations of agents. The protocol
-combines attenuated grants, shared accounting, transitive revocation and direct review
-access. An offline simulator evaluates eight authored scenarios across four control
-regimes, three response delays and two delegation depths, yielding 192 deterministic
-configurations. Logging and individual limits admit \LogViolations{} and
-\LocalViolations{} out-of-mandate effects, respectively; hierarchical controls admit
-none under complete mediation. Adding scripted review raises valid work from
-\HierarchyCompleted{} to \ReviewCompleted{} of 348 opportunities, while causing
-\ReviewFalseBlocks{} valid-work blocks after false complaints. A separate bypass
-challenge defeats the broker's protection. These are consequences of explicit rules,
-not evidence that representation changes model behavior or would have prevented a
-historical incident. The contribution is a reproducible acceptance-test artifact and an
-operational governance specification that connects organizational authority to effects,
-while exposing the costs and limits of that connection.
+An agent broker can validate every delegated credential and still mishandle the
+shared authority under which its holders act. Sibling grants may consume one
+resource pool; queued requests may outlive an ancestor's authorization; and a
+permitted action may remain hazardous. We present an executable acceptance contract
+for brokers that delegate authority to agent organizations. The contract specifies
+records connecting mandates, grants, decisions and outcomes, and probes attenuation,
+shared expenditure, current ancestor status, queued effects, historical accounting,
+direct review access and request-bound authority. A serialized reference
+implementation satisfies the probes. Two isolated ablations expose which obligations
+depend on shared accounting and current ancestry checks. A separate set of reporting
+traces varies concern arrival, response delay and whether receipt immediately pauses
+the affected capability. These traces distinguish authority compliance from hazard
+containment and show why a response mechanism cannot compensate for an absent report.
+The contribution is a reusable integration contract and diagnostic artifact, building
+on capability security and hierarchical resource controls. Incident reports motivate
+the control obligations; the artifact supplies deterministic conformance checks,
+rather than estimates of agent behavior. All probes, outcomes and timing traces can
+be reproduced offline and adapted to an isolated broker through a documented interface.

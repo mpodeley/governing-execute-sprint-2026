@@ -10,16 +10,11 @@ ROOT = Path(__file__).resolve().parents[1]
 assets = ROOT/"docs/assets"
 assets.mkdir(exist_ok=True)
 shutil.copy2(ROOT/"report/governing-execute.pdf", assets/"governing-execute.pdf")
-shutil.copy2(ROOT/"report/latex/figures/architecture.png", assets/"architecture.png")
-rows = list(csv.DictReader((ROOT/"results/final/metrics.csv").open()))
-values = []
-for delay in (0, 2, 6):
-    selection = {r["scenario"]: r for r in rows if r["regime"] == "review"
-                 and r["depth"] == "3" and r["delay"] == str(delay)}
-    values.append(dict(delay=delay,
-                       completed=int(selection["missing_input"]["legitimate_completed"]),
-                       blocked=int(selection["false_alarm"]["false_hold_blocks"])))
-(assets/"results.js").write_text("window.reviewResults = "+json.dumps(values)+";\n")
+matrix = json.loads((ROOT/"results/acceptance/matrix.json").read_text())
+timing = json.loads((ROOT/"results/acceptance/timing.json").read_text())
+values = dict(matrix=[r for r in matrix if r["probe"] == "C4"],
+              timing=[{k:v for k,v in r.items() if k != "events"} for r in timing])
+(assets/"results.js").write_text("window.contractResults = "+json.dumps(values)+";\n")
 excluded = {".aux", ".blg", ".log", ".out", ".pyc"}
 files = [p for p in sorted(ROOT.rglob("*")) if p.is_file()
          and "__pycache__" not in p.parts and ".git" not in p.relative_to(ROOT).parts

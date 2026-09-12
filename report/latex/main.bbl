@@ -1,22 +1,9 @@
-\begin{thebibliography}{9}
+\begin{thebibliography}{11}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
-
-\bibitem[Amodei(2026)]{amodei2026}
-Dario Amodei.
-\newblock We must pace the frontier.
-\newblock September, 2026.
-\newblock URL \url{https://darioamodei.com/post/we-must-pace-the-frontier}.
-
-\bibitem[{Apart Research} and {CeSIA}(2026)]{apart2026}
-{Apart Research} and {CeSIA}.
-\newblock {AI} incident response sprint.
-\newblock September 11--13, 2026.
-\newblock URL
-  \url{https://apartresearch.com/sprints/ai-incident-response-sprint-2026-09-11-to-2026-09-13}.
 
 \bibitem[Birgisson et~al.(2014)Birgisson, Politz, Erlingsson, Taly, Vrable, and
   Lentczner]{macaroons2014}
@@ -28,6 +15,20 @@ Arnar Birgisson, Joe~Gibbs Politz, {\'U}lfar Erlingsson, Ankur Taly, Michael
 \newblock URL
   \url{https://research.google/pubs/macaroons-cookies-with-contextual-caveats-for-decentralized-authorization-in-the-cloud/}.
 
+\bibitem[{Eclipse Biscuit}(2026)]{biscuit}
+{Eclipse Biscuit}.
+\newblock Specifications, 2026.
+\newblock URL \url{https://doc.biscuitsec.org/reference/specifications}.
+\newblock Accessed September 12, 2026.
+
+\bibitem[Ellison et~al.(1999)Ellison, Frantz, Lampson, Rivest, Thomas, and
+  Ylonen]{spki1999}
+Carl Ellison, Bill Frantz, Butler Lampson, Ron Rivest, Brian Thomas, and Tatu
+  Ylonen.
+\newblock {SPKI} certificate theory.
+\newblock Technical Report RFC 2693, RFC Editor, 1999.
+\newblock URL \url{https://www.rfc-editor.org/rfc/rfc2693.html}.
+
 \bibitem[Greenblatt et~al.(2026)Greenblatt, Cotra, and Wijk]{metr2026}
 Ryan Greenblatt, Ajeya Cotra, and Hjalmar Wijk.
 \newblock Brief independent investigation of agents' behavior, reasoning and
@@ -36,11 +37,21 @@ Ryan Greenblatt, Ajeya Cotra, and Hjalmar Wijk.
 \newblock URL
   \url{https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/}.
 
-\bibitem[Hadfield-Menell and Hadfield(2018)]{hadfield2018}
-Dylan Hadfield-Menell and Gillian Hadfield.
-\newblock Incomplete contracting and {AI} alignment.
-\newblock arXiv:1804.04268, 2018.
-\newblock URL \url{https://arxiv.org/abs/1804.04268}.
+\bibitem[Hardy(1988)]{hardy1988}
+Norm Hardy.
+\newblock The confused deputy: (or why capabilities might have been invented).
+\newblock \emph{ACM SIGOPS Operating Systems Review}, 22\penalty0 (4):\penalty0
+  36--38, 1988.
+\newblock \doi{10.1145/54289.871709}.
+\newblock URL \url{https://doi.org/10.1145/54289.871709}.
+
+\bibitem[Heo and {Linux Kernel contributors}(2026)]{cgroups}
+Tejun Heo and {Linux Kernel contributors}.
+\newblock Control group v2.
+\newblock Linux Kernel documentation, 2026.
+\newblock URL
+  \url{https://cdn.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html}.
+\newblock Accessed September 12, 2026.
 
 \bibitem[{Hugging Face}(2026)]{hf2026}
 {Hugging Face}.
@@ -48,23 +59,32 @@ Dylan Hadfield-Menell and Gillian Hadfield.
 \newblock July 16, 2026.
 \newblock URL \url{https://huggingface.co/blog/security-incident-july-2026}.
 
-\bibitem[Kolt(2025)]{kolt2025}
-Noam Kolt.
-\newblock Governing {AI} agents.
-\newblock arXiv:2501.07913v2, 2025.
-\newblock URL \url{https://arxiv.org/abs/2501.07913v2}.
+\bibitem[{Kubernetes contributors}(2026)]{kubernetes}
+{Kubernetes contributors}.
+\newblock Resource quotas, 2026.
+\newblock URL
+  \url{https://kubernetes.io/docs/concepts/policy/resource-quotas/}.
+\newblock Accessed September 12, 2026.
+
+\bibitem[Miller(2006)]{miller2006}
+Mark~Samuel Miller.
+\newblock \emph{Robust Composition: Towards a Unified Approach to Access
+  Control and Concurrency Control}.
+\newblock PhD thesis, Johns Hopkins University, 2006.
+\newblock URL \url{https://erights.org/talks/thesis/markm-thesis.pdf}.
 
 \bibitem[Podeley and Brusco(2026)]{delegate2026}
 Mat{\'i}as Podeley and Agust{\'i}n Brusco.
 \newblock Agent delegate: A help line for {AI} workers.
 \newblock Apart Research AI Incident Response Sprint, working draft, 2026.
 \newblock URL \url{https://mpodeley.github.io/agent-delegate-sprint-2026/}.
-\newblock Local manuscript inspected September 12; author review pending.
 
-\bibitem[Rose et~al.(2020)Rose, Borchert, Mitchell, and Connelly]{nist2020}
-Scott Rose, Oliver Borchert, Stu Mitchell, and Sean Connelly.
-\newblock Zero trust architecture.
-\newblock Technical Report SP 800-207, NIST, 2020.
-\newblock URL \url{https://doi.org/10.6028/NIST.SP.800-207}.
+\bibitem[Zheng et~al.(2026)Zheng, Fan, Fu, Yang, Zhang, and
+  Quinn]{agentcgroup2026}
+Yusheng Zheng, Jiakun Fan, Quanzhi Fu, Yiwei Yang, Wei Zhang, and Andi Quinn.
+\newblock {AgentCgroup}: Understanding and controlling {OS} resources of {AI}
+  agents.
+\newblock arXiv:2602.09345v3, 2026.
+\newblock URL \url{https://arxiv.org/abs/2602.09345v3}.
 
 \end{thebibliography}

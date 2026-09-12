@@ -24,3 +24,19 @@ with tempfile.TemporaryDirectory(prefix="governing-execute-") as tmp:
     for name in ("metrics.csv", "traces.jsonl", "coverage.json", "manifest.json"):
         assert (expected/name).read_bytes() == (new/name).read_bytes(), name
 print("PASS: tests, artifact hashes, and exact replay of all 192 configurations + coverage challenge.")
+
+from run_acceptance import run as acceptance_run
+subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "acceptance_tests", "-v"],
+               cwd=ROOT, check=True)
+expected = ROOT/"results/acceptance"
+manifest = json.loads((expected/"manifest.json").read_text())
+for name, digest in manifest["artifacts"].items():
+    assert hashlib.sha256((expected/name).read_bytes()).hexdigest() == digest, name
+with tempfile.TemporaryDirectory(prefix="broker-acceptance-") as tmp:
+    new = Path(tmp)/"replay"
+    acceptance_run(new)
+    for name in ("matrix.json", "timing.json", "manifest.json"):
+        assert (expected/name).read_bytes() == (new/name).read_bytes(), name
+from render_acceptance import render
+render()
+print("PASS: acceptance tests, 24 contract outcomes, 18 timing traces, exact replay and denominator reconciliation.")
