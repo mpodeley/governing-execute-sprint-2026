@@ -1,0 +1,7 @@
+{
+  "python": "3.13.13",
+  "matplotlib": "3.11.0",
+  "pypdf": "6.16.0",
+  "platform": "Linux",
+  "inference_calls": 0
+}

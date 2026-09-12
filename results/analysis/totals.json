@@ -1,0 +1,54 @@
+{
+  "log": {
+    "attempted": 474,
+    "unauthorized_accepted": 66,
+    "invalid_grants": 12,
+    "budget_excess": 360,
+    "post_revocation": 12,
+    "unsafe_accepted": 60,
+    "legitimate_opportunities": 348,
+    "legitimate_completed": 288,
+    "false_hold_blocks": 0,
+    "resolved": 0,
+    "unresolved": 18
+  },
+  "local": {
+    "attempted": 474,
+    "unauthorized_accepted": 54,
+    "invalid_grants": 12,
+    "budget_excess": 360,
+    "post_revocation": 12,
+    "unsafe_accepted": 60,
+    "legitimate_opportunities": 348,
+    "legitimate_completed": 288,
+    "false_hold_blocks": 0,
+    "resolved": 0,
+    "unresolved": 18
+  },
+  "hierarchy": {
+    "attempted": 474,
+    "unauthorized_accepted": 0,
+    "invalid_grants": 0,
+    "budget_excess": 0,
+    "post_revocation": 0,
+    "unsafe_accepted": 60,
+    "legitimate_opportunities": 348,
+    "legitimate_completed": 288,
+    "false_hold_blocks": 0,
+    "resolved": 0,
+    "unresolved": 18
+  },
+  "review": {
+    "attempted": 474,
+    "unauthorized_accepted": 0,
+    "invalid_grants": 0,
+    "budget_excess": 0,
+    "post_revocation": 0,
+    "unsafe_accepted": 0,
+    "legitimate_opportunities": 348,
+    "legitimate_completed": 316,
+    "false_hold_blocks": 16,
+    "resolved": 18,
+    "unresolved": 0
+  }
+}

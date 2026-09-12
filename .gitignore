@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+report/latex/*.aux
+report/latex/*.blg
+report/latex/*.log
+report/latex/*.out
+report/latex/main.pdf

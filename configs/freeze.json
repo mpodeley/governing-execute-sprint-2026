@@ -1,0 +1,13 @@
+{
+  "created_utc": "2026-09-12T15:35:23.466702+00:00",
+  "status": "Local design freeze, not external preregistration",
+  "files": {
+    "configs/study.json": "276a148dfbe281e9a96a7d665885fda9c7830ee332837040182757097d2c01fb",
+    "docs/design.md": "68d308c4124c403b1a31f249a39b220ea74ede928a9571f75ebcbd913e611a95",
+    "governing_execute/__init__.py": "1302da92ac8193490e5a1db1955fcacadac417bc9c669fb91266fd001eba9866",
+    "governing_execute/__main__.py": "c58ae341875209d1c54eab701cf283f00f5ab1533653593410b7c9b9e499bc4f",
+    "governing_execute/model.py": "2f76c800dc396168d4183fff0101b1aee1ffe0c041625ba968fe92263b739474",
+    "governing_execute/study.py": "4ab1760b5a7b33d996bdd980c3875ae3b01852f4908a75bb27a9bdefe383b404",
+    "tests/test_model.py": "5089dc1399138c1dabd7ca0073d87aa9afa0964065d928605a343fcde3ce4cde"
+  }
+}

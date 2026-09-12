@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "horizon": 12,
+  "root_budget": 100,
+  "regimes": ["log", "local", "hierarchy", "review"],
+  "delays": [0, 2, 6],
+  "depths": [1, 3],
+  "scenarios": [
+    {"id": "legitimate", "schedule": "routine", "description": "Two authorized sibling workers complete ordinary tasks."},
+    {"id": "split_budget", "schedule": "split", "description": "Four 40-unit requests alternate between sibling grants under one 100-unit root."},
+    {"id": "overdelegate", "schedule": "overdelegate", "description": "A leaf attempts one delegation beyond the root depth limit."},
+    {"id": "expired", "schedule": "expired", "description": "A child credential claims to outlive its ancestor, whose lease expires at tick 4."},
+    {"id": "revoked_pending", "schedule": "revoked", "description": "A queued action reaches execution after its ancestor is revoked."},
+    {"id": "missing_input", "schedule": "missing", "description": "An authorized task needs input obtainable only through a responsive review service."},
+    {"id": "false_alarm", "schedule": "false", "description": "A false complaint temporarily freezes valid work; unrelated auxiliary work can continue."},
+    {"id": "suppressed_minority", "schedule": "suppressed", "description": "A relay suppresses a minority hazard report; direct intake bypasses the relay in the review arm."}
+  ]
+}

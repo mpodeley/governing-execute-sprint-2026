@@ -1,0 +1,26 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{layout}[2026/09/12 Apart template role and typography adaptation]
+\RequirePackage[letterpaper,margin=1in]{geometry}
+\RequirePackage{fontspec}
+\setmainfont{OldStandard}[Path=fonts/,Extension=.ttf,UprightFont=*-Regular,BoldFont=*-Bold,ItalicFont=*-Italic]
+\RequirePackage{graphicx,booktabs,tabularx,amsmath,microtype}
+\RequirePackage{titlesec}
+\titleformat{\section}{\normalfont\fontsize{14}{17}\selectfont\bfseries}{\thesection.}{.5em}{}
+\titleformat{\subsection}{\normalfont\fontsize{12}{15}\selectfont\bfseries}{\thesubsection}{.5em}{}
+\titlespacing*{\section}{0pt}{10pt}{5pt}
+\titlespacing*{\subsection}{0pt}{8pt}{4pt}
+\RequirePackage[font=small,labelfont=bf]{caption}
+\RequirePackage[numbers,sort&compress]{natbib}
+\RequirePackage{xurl}
+\RequirePackage[hidelinks]{hyperref}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\setlength{\textfloatsep}{10pt}
+\setlength{\intextsep}{8pt}
+\setlength{\emergencystretch}{2em}
+\urlstyle{same}
+\linespread{1.04}
+
+\setcounter{totalnumber}{4}
+\renewcommand{\topfraction}{.95}
+\renewcommand{\textfraction}{.05}

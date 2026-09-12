@@ -1,0 +1,15 @@
+{
+  "body_pages": 7,
+  "narrative_pages": 6,
+  "body_count_note": "Includes the statements page where references begin",
+  "total_pages": 11,
+  "abstract_words": 190,
+  "author": "Alejandro Garibotti",
+  "model_calls": 0,
+  "configurations": 192,
+  "verified": "Automated checks only; independent author review pending",
+  "source_freeze_sha256": "41147de454e0712b8ca7c36df9a4a08585c9cdec79e3c57b2c1c69ab4eecc85b",
+  "pdf_sha256": "f2cc23b51a345d55e5908fb604b697b0e85b848ff062c6d8a124f245bad018b7",
+  "compiler": "Tectonic 0.16.9",
+  "warnings": []
+}

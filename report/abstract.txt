@@ -1,0 +1,18 @@
+AI agents can delegate work faster than humans can inspect the resulting organization.
+This creates a control problem: individually bounded agents may collectively exceed a
+shared budget, inherit stale authority, or continue acting while a concern awaits review.
+We introduce execute as a working term for effective action capacity and specify an
+institutional protocol for allocating it across organizations of agents. The protocol
+combines attenuated grants, shared accounting, transitive revocation and direct review
+access. An offline simulator evaluates eight authored scenarios across four control
+regimes, three response delays and two delegation depths, yielding 192 deterministic
+configurations. Logging and individual limits admit 66 and
+54 out-of-mandate effects, respectively; hierarchical controls admit
+none under complete mediation. Adding scripted review raises valid work from
+288 to 316 of 348 opportunities, while causing
+16 valid-work blocks after false complaints. A separate bypass
+challenge defeats the broker's protection. These are consequences of explicit rules,
+not evidence that representation changes model behavior or would have prevented a
+historical incident. The contribution is a reproducible acceptance-test artifact and an
+operational governance specification that connects organizational authority to effects,
+while exposing the costs and limits of that connection.
